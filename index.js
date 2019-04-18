@@ -2,8 +2,6 @@ const http = require("http");
 const fs = require("fs");
 var Books = require('.lib/books.js');
 
-
-
 http.createServer((req, res) =>{
     const path = req.url.toLocaleLowerCase();
 
