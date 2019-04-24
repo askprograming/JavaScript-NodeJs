@@ -1,22 +1,17 @@
 {
-  "name": "book",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "itc230",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "nodemon ./index.js --exec babel-node -e js"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/askprograming/JavaScript-NodeJs"
-  },
-  "author": "Asgedom",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/askprograming/JavaScript-NodeJs"
-  },
-  "homepage": "https://github.com/askprograming/Excercie-On-NodeJs#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-handlebars": "^3.0.2",
+    "hbs": "~4.0.1",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0"
   }
 }
