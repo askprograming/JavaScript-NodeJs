@@ -1,6 +1,8 @@
 const http = require("http");
 const fs = require("fs");
-var Books = require('.lib/books.js');
+const express = require('express');
+const books =require('./lib/books');
+
 
 http.createServer((req, res) =>{
     const path = req.url.toLocaleLowerCase();
@@ -20,6 +22,7 @@ http.createServer((req, res) =>{
             res.writeHead(200,{'content-type':'text/plain'});
             res.end('about page');
             break;
+
         case '/getAll':
             res.writeHead(200, {'Content -type':'text/plain'});
             let found1= home.getAll();
@@ -27,14 +30,16 @@ http.createServer((req, res) =>{
             res.write(result1 + "\n");
             res.end("\n");
             break;
+
         case '/delete':
-            let deleted = Books.delete(title);
-            res.writeHead(200, { 'Content-type':'text/plain'});
-            let deleted = (deleted) ? JSON.stringify(deleated):"Not found";
+            let deleted = books.delete(title);
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            let deletedd = (deleted) ? JSON.stringify(deleted): "Not found";
+            break;
         case '/add':
-            let added = Books.add(title);
-            res.writeHead(200,{'content-type': 'text/plain'});
-            res.end(result1);
+            let added = books.add(title.nodeintro);
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end(results);
             break;
         default:
             res.writeHead(404,{'content-type':'text/plain'});
