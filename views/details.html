@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BooksList</title>
+</head>
+<body>
+  <a href="/">Home</a>
+  {{#if result}}
+      <h2>{{title}} details</h2>
+      <li>Title: {{result.title}}</li>
+      <li>Title: {{result.author}}</li>
+      <li>Title: {{result.gender}}</li>
+      <li>Title: {{result.publisher}}</li>
+      <p>
+      <a href="/delete?title={{result.title}}">Delete</a>
+      </p>
+  {{else}}
+          <h2>{{title}} not found</h2>
+  {{/if}}
+
+</body>
+</html>
