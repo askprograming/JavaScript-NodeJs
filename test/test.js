@@ -12,7 +12,7 @@ describe("Book module", () => {
    const result = book.get("dune");
    expect(result).to.deep.equal({title: "dune", author:"frank herbert", pubdate:1969});
  });
- 
+  
  it("fails w/ invalid book", () => {
    const result = book.get("fake");
    expect(result).to.be.undefined;
