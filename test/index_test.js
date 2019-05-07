@@ -18,4 +18,4 @@ describe("Book module", () => {
       var result = validatePassword("abcDef");
       expect(result).to.be.false;
     });    
-
+  
