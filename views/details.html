@@ -10,10 +10,11 @@
   <a href="/">Home</a>
   {{#if result}}
       <h2>{{title}} details</h2>
-      <li>Title: {{result.title}}</li>
-      <li>Title: {{result.author}}</li>
-      <li>Title: {{result.gender}}</li>
-      <li>Title: {{result.publisher}}</li>
+      <li><ISBN:>{result.ISBN}</li>
+      <li>title: {{result.title}}</li>
+      <li>Author: {{result.author}}</li>
+      <li>gender: {{result.gender}}</li>
+      <li>publisher: {{result.publisher}}</li>
       <p>
       <a href="/delete?title={{result.title}}">Delete</a>
       </p>

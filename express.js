@@ -1,10 +1,7 @@
 'use strict'
-//const http = require("http");
-//const fs = require("fs");
-const books =require('./lib/books')
-//const bodyParser = require("body-parser")
 const express = require("express");
 const app = express();
+const booksdb = require(".lib/booksdb.js");
 
 app.set('port', process.env.PORT || 4000);
 app.use(express.static(__dirname + '/public')); //set location for static files
@@ -14,27 +11,41 @@ let handlebars =  require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html'}));
 app.set("view engine", ".html");
 
-// send static file as response
-app.get('/', function(req,res){
-    res.type('text/html');
-    res.sendFile(__dirname + '/public/home.html'); 
+
+app.get('/', (req, res, next) => {
+  booksdb.getAll().then((items) => {
+    res.render('home', {books: items }); 
+  }).catch((err) =>{
+    return next(err);
+  });
 });
 
-
-
-
-// Handle POST
-app.post('/details', function(req,res){
-    console.log(req.body)
-    var header = 'Searching for:  ' + req.body.title + '<br>';
-    var found = books.get(req.body.searchtitle);
-    res.render("details", {title: req.body.searchtitle, result: found});
+// to see details 
+app.get('/details', (req,res,next) => {
+  booksdb.findOne({ title:req.query.title }, (err, books) => {
+      if (err) return next(err);
+      res.type('text/html');
+      res.render('details', {result: books} ); 
+  });
 });
 
-// Handle GET 
-app.get('/delete', function(req,res){
-    let result = books.delete(req.body.title); // delete book object
-    res.render('delete', {title: req.body.title, result: result});
+app.post('/details', (req,res, next) => {
+  booksdb.findOne({ title:req.body.title }, (err, books) => {
+      if (err) return next(err);
+      res.type('text/html');
+      res.render('details', {result: books} ); 
+  });
+});
+
+app.get('/delete', (req,res, next) =>{
+  booksdb.remove({title:req.query.title}, (err, result) => {
+      if(err) return next(err);
+      let deleted = result.n !==0; 
+      book.count({}, (err,total) => {
+          res.type('text/html');
+          res.render('delete', {title: req.query.title, deleted:deleted, total:total} );
+      });
+  });
 });
 
 // define 404 handler
@@ -43,7 +54,9 @@ app.use(function(req,res) {
     res.status(404);
     res.send('404 - Not found');
 });
+//app.listen(process.env.PORT || 3000);
 
 app.listen(app.get('port'), function() {
     console.log('express started');    
 });
+

@@ -1,41 +1,45 @@
-var expect = require("mocha").expect;
-//var book = require("../lib/book");
 
-//to test the password
-const validatePassword =(password) =>{
-    if(password.toLowerCase()!=password);
-}
-const expect = require("mocha").expect;
-const book = require("../lib/book");
-describe("Book module", () => {
+'use strict'
+const expect = require("chai").expect;
+const book = require("../lib/books");
+
+
+describe("Book", () => {
+  
  it("returns requested book", () => {
-   const result = book.get("dune");
-   expect(result).to.deep.equal({title: "dune", author:"frank herbert", pubdate:1969});
+   let result = book.get("My Cat Likes to Hide");
+   expect(result).to.deep.equal({ISBN: 8783116,title:"My Cat Likes to Hide",author:"Lynley Dodd ",gender:"female",publisher:"Mallinson Rendel"});
  });
   
- it("fails w/ invalid book", () => {
-   const result = book.get("fake");
+ it("fails return invalid book", () => {
+   let result = book.get("fake");
    expect(result).to.be.undefined;
  });
+
+ it("add new book", () => {
+   let result = book.add({ISBN: 8783117,title:"Likes to Hide",author:"Lynley Dodd ",gender:"female",publisher:"Mallinson Rendel"});
+   expect(result.added).to.be.true;
+  });
+
+ it("fails to add existing book", () => {
+  let result = book.add({ISBN: 8783116,title:"My Cat Likes to Hide",author:"Lynley Dodd ",gender:"female",publisher:"Mallinson Rendel"});
+  expect(result.added).to.be.false;
+});
+ it("delet existing book",() =>{
+  let result = book.delete('The Hobbit');
+  expect(result.deleted).to.be.true;
+ });
+ it("fails deleting invalid book", () =>{
+   let result = book.delete("nodejs");
+   expect(result.deleted).to.be.false;
+ })
+ 
 });
 
+// to run the test => npm test
 
-
-
-
-
-/*
-describe("Book module", () => {
- it("passes if mixes case", function() {
-   var result = validatePassword("abcDef");
-   expect(result).to.be.true;
- });
- 
- describe("Book module", () => {
-    it("rfails if all lower case", function() {
-      var result = validatePassword("abcDef");
-      expect(result).to.be.false;
-    });    
- });
-
- */
+//to test the password
+//var describe = mocha.describe
+// const validatePassword =(password) =>{
+//     if(password.toLowerCase()!=password);
+// }
