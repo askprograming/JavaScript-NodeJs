@@ -1,7 +1,7 @@
 'use strict'
 const express = require("express");
 const app = express();
-const booksdb = require(".lib/booksdb.js");
+const booksdb = require("./lib/booksdb.js");
 
 app.set('port', process.env.PORT || 4000);
 app.use(express.static(__dirname + '/public')); //set location for static files
