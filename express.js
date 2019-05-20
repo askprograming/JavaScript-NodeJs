@@ -16,7 +16,7 @@ app.get('/', (req, res, next) => {
   booksdb.getAll().then((items) => {
     res.render('home', {books: items }); 
   }).catch((err) =>{
-    return next(err);
+    return next(err);    
   });
 });
 
