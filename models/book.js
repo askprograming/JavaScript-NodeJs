@@ -5,6 +5,7 @@ const connectionString = "mongodb+srv://dbuser:bdpassword@cluster0-3fmsb.mongodb
 mongoose.connect(connectionString, { dbName: 'project', useNewUrlParser: true });
  
 
+//error shwo
 const conn = mongoose.connection; 
 conn.on('error', console.error.bind(console, 'connection error:'));
 
