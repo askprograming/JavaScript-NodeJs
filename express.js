@@ -1,7 +1,7 @@
 'use strict'
 const express = require("express");
 const app = express();
-const booksdb = require("./lib/booksdb.js");
+const booksdb = require("./models/booksdb.js/index.js");
 
 app.set('port', process.env.PORT || 4000);
 app.use(express.static(__dirname + '/public')); //set location for static files
@@ -12,39 +12,34 @@ app.engine(".html", handlebars({extname: '.html'}));
 app.set("view engine", ".html");
 
 
-app.get('/', (req, res, next) => {
+// home 
+app.get('/', (req,res) => {
+    res.render('home');
+});
+
+app.get('/books', (req, res, next) => {
   booksdb.getAll().then((items) => {
-    res.render('home', {books: items }); 
-  }).catch((err) =>{
-    return next(err);    
+    res.send({books: items});
+  }).catch((err) => {
+    return next(err);
   });
 });
 
-// to see details 
-app.get('/details', (req,res,next) => {
-  booksdb.findOne({ title:req.query.title }, (err, books) => {
-      if (err) return next(err);
-      res.type('text/html');
-      res.render('details', {result: books} ); 
-  });
+
+app.post()
+//get details
+app.post('/details', (req,res) => {
+  booksdb.get(req.body.title).then((item)=>{
+      res.render('details', {title:req.body.title, item})
+  })
 });
 
-app.post('/details', (req,res, next) => {
-  booksdb.findOne({ title:req.body.title }, (err, books) => {
-      if (err) return next(err);
-      res.type('text/html');
-      res.render('details', {result: books} ); 
-  });
-});
-
-app.get('/delete', (req,res, next) =>{
-  booksdb.remove({title:req.query.title}, (err, result) => {
-      if(err) return next(err);
-      let deleted = result.n !==0; 
-      book.count({}, (err,total) => {
-          res.type('text/html');
-          res.render('delete', {title: req.query.title, deleted:deleted, total:total} );
-      });
+//delete and count
+app.get('/delete', (req,res) => {
+  booksdb.delete(req.query.title).then(()=>{
+      booksdb.count().then((count) => {
+          res.render('delete', {title: req.query.title, count} );
+      })
   });
 });
 
