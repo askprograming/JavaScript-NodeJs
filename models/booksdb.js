@@ -17,13 +17,24 @@ exports.get = (title) => {
     }return result
   })};
 
-exports.delete = (title) => {
-  return books.findOneAndDelete({'title':title}, (err, result) => {
+  //add
+  exports.add = (newbook) =>{
+    let houseofsale = title.name;
+
+    books.updateOne({'title': houseofsale}, newbook, {upsert: true},(err, result) =>{
+      if(err) {
+        return err;
+      } return result;
+    })};
+    
+    //delete
+    exports.delete = (title) => {
+  return books.findOneAndDelete({'title':title}, (err, deleted) => {
     if (err) {
       return err;
     }
-    return result;
-  });
+    return deleted;
+  })
 };
 
 exports.count = () => {

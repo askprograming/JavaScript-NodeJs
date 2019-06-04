@@ -7,6 +7,7 @@ app.set('port', process.env.PORT || 4000);
 app.use(express.static(__dirname + '/public')); //set location for static files
 app.use(require("body-parser").urlencoded({extended: true}));//parse form submission
 
+const booksdb = require('./models/booksdb');
 let handlebars =  require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html'}));
 app.set("view engine", ".html");
@@ -32,6 +33,20 @@ app.post('/details', (req,res) => {
   booksdb.get(req.body.title).then((item)=>{
       res.render('details', {title:req.body.title, item})
   })
+});
+
+app.post('/add',( req, res) => {
+  let newbook ={
+    ISBN:8260307,
+    title:"The Hobbit",
+    author:"J. R. R. Tolkien",
+    gender:"male",
+    publisher:"Houghton Mifflin"
+  };
+
+  let result = booksdb.add(newbook);
+  res.sendStatus(200);
+  res.send(result);
 });
 
 //delete and count
