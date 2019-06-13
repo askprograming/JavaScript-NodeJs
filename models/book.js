@@ -1,21 +1,22 @@
+
+
 const mongoose = require('mongoose');
+let credent = require('../models/credentials');
 
-// remote db connection settings//to connect with mongodb 
-const connectionString = "mongodb+srv://dbuser:bdpassword@cluster0-3fmsb.mongodb.net/test?retryWrites=true";
+mongoose.connect(credent.connectionString, { dbName: 'project', useNewUrlParser: true, useFindAndModify: false }); 
 
-
-mongoose.connect(connectionString, { dbName: 'project', useNewUrlParser: true });
-//error show
-const conn = mongoose.connection; 
-conn.on('error', console.error.bind(console, 'connection error:'));
+mongoose.connection.on('open', () => {
+    console.log('Mongoose connected.');
+  });
 
 
-
-const mySchema = mongoose.Schema({
+  const mySchema = mongoose.Schema({
     ISBN: Number,
     title: { type: String, required: true },
     author: String, 
     gender: String,
     publisher: String
-}); 
+});
+
 module.exports = mongoose.model('books', mySchema);
+

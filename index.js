@@ -1,51 +1,74 @@
-const http = require("http");
-const fs = require("fs");
-//const express = require('express');
-const books =require('./lib/books');
-//const books =require('./lib/books');
+'use strict'
+const express = require("express");
+const app = express();
+const booksdb = require("./models/booksdb");
 
- 
+app.set('port', process.env.PORT || 4000);
+app.use(express.static(__dirname + '/public')); //set location for static files
+app.use(require("body-parser").urlencoded({extended: true}));//parse form submission
 
-http.createServer((req, res) =>{
-    const path = req.url.toLocaleLowerCase();
+//const booksdb = require('./models/booksdb');
+let TheHobbit =  require("express-handlebars");
+app.engine(".html", TheHobbit({extname: '.html'}));
+app.set("view engine", ".html");
 
-    switch(path){
-        case '/':
-            fs.readFile("/public/home.html", (err, data)=>{
-                if(err) return console.error(err);
-                res.writeHead(200,{'content-type':'text/html'});
-                res.end(data.toString());
-            });
+app.listen(app.get('port'), function() { 
+  console.log('express started');    
+});
 
-            res.writeHead(200,{'content-type':'text/plain'});
-            res.end('Home page');
-            break;
-        case '/about':
-            res.writeHead(200,{'content-type':'text/plain'});
-            res.end('About page');
-            break;
+// home 
+app.get('/', (req,res) => {
+    res.render('home');
+});
 
-        case '/getAll':
-            res.writeHead(200, {'Content -type':'text/plain'});
-            let found1= books.getAll();
-            let result1= (found1)?JSON.stringify(found1):"Not found";
-            res.write(result1 + "\n");
-            res.end("\n");
-            break;
+app.get('/books', (req, res, next) => {
+  booksdb.getAll().then((items) => {
+    res.send({books: items});
+  }).catch((err) => {
+    return next(err);
+  });
+});
 
-        case '/delete':
-            let deleted = books.delete(books);
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            let dele = (deleted) ? JSON.stringify(dele): "Not found";
-            break;
-        case '/add':
-            let added = books.add(books.nodeintro);
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(added);
-            break;
-        default:
-            res.writeHead(404,{'content-type':'text/plain'});
-            res.end('404:page not found');
-            break;
-    }
-}).listen(process.env.PORT || 3000);
+
+app.post('/add',( req, res) => {
+  let newbook ={
+    ISBN:8260307,
+    title:"The Hobbit",
+    author:"J. R. R. Tolkien",
+    gender:"male",
+    publisher:"Houghton Mifflin"
+  };
+
+  let result = booksdb.add(newbook);
+  res.sendStatus(200);
+  res.send(result);
+});
+
+
+//get details
+app.post('/details', (req,res) => {
+  booksdb.get(req.body.title).then((item)=>{
+      res.render('details', {title:req.body.title, item})
+  })
+});
+
+
+//delete and count
+app.get('/delete', (req,res) => {
+  booksdb.delete(req.query.title).then(()=>{
+      booksdb.count().then((count) => {
+          res.render('delete', {title: req.query.title, count} );
+      })
+  });
+});
+
+// define 404 handler
+app.use(function(req,res) {
+    res.type('text/plain'); 
+    res.status(404);
+    res.send('404 - Not found');
+});
+//app.listen(process.env.PORT || 4000);
+
+
+

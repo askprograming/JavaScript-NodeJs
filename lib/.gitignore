@@ -1,5 +1,4 @@
 #ignore 
-files installed by npm
 node_modules
 package-lock.json
 package.json

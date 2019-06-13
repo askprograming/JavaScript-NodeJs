@@ -1,1 +1,6 @@
+#ignore 
 node_modules
+package-lock.json
+package.json
+lib/credentials.js
+react/src/credentials.js
