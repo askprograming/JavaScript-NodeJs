@@ -29,6 +29,12 @@ app.get('/books', (req, res, next) => {
   });
 });
 
+routes.fetch("/api/v1/books").then((response) => {
+  return response.json();
+ }).then((results) => {
+  console.log(results) 
+ });
+
 
 app.post('/add',( req, res) => {
   let newbook ={
